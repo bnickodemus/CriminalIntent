@@ -22,6 +22,7 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private int mCrimeIndexThatChanged; // savedInstanceState()
 
     private class CrimeHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
@@ -50,7 +51,9 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            mCrimeIndexThatChanged = getAdapterPosition();
             startActivity(intent);
+            //startActivityForResult();
         }
     }
 
@@ -106,7 +109,8 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyDataSetChanged();
+            //mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(mCrimeIndexThatChanged); // what position has changed?
         }
     }
 }

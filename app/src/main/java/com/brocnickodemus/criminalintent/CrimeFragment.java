@@ -19,9 +19,9 @@ import java.util.UUID;
  */
 
 public class CrimeFragment extends Fragment {
-    private static final String ARG_CRIME_ID = "crime_id";
+    private static final String ARG_CRIME_ID = "crime_id"; // public
 
-    public Crime mCrime;
+    public Crime mCrime; // private
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
