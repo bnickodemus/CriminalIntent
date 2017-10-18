@@ -32,7 +32,7 @@ public class CrimeLab {
             crime.setTitle("Crime #" + i);
             crime.setSolved(i % 2 == 0); // Every other one
 
-            mCrimes.add(crime.getId(), crime);
+            mCrimes.put(crime.getId(), crime);
         }
     }
 
