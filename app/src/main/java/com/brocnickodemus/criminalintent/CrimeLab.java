@@ -3,7 +3,10 @@ package com.brocnickodemus.criminalintent;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -13,7 +16,7 @@ import java.util.UUID;
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
 
-    private List<Crime> mCrimes;
+    private HashMap<UUID, Crime> mCrimes;
 
     public static CrimeLab get(Context context) {
         if (sCrimeLab == null) {
@@ -23,26 +26,22 @@ public class CrimeLab {
     }
 
     private CrimeLab(Context context) {
-        mCrimes = new ArrayList<>();
+        mCrimes = new HashMap<UUID, Crime>();
         for (int i = 0; i < 100; i++) {
             Crime crime = new Crime();
             crime.setTitle("Crime #" + i);
             crime.setSolved(i % 2 == 0); // Every other one
-            mCrimes.add(crime);
+
+            mCrimes.add(crime.getId(), crime);
         }
     }
 
     public List<Crime> getCrimes() {
-        return mCrimes;
+        Collection<Crime> list = mCrimes.values();
+        return new ArrayList(list);
     }
 
     public Crime getCrime(UUID id) {
-        for (Crime crime : mCrimes) {
-            if (crime.getId().equals(id)) {
-                return crime;
-            }
-        }
-
-        return null;
+        return mCrimes.get(id);
     }
 }
