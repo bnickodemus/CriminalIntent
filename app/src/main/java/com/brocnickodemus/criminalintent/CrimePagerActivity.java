@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +24,8 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
+    private Button mFirstCrime;
+    private Button mLastCrime;
 
     public static Intent newIntent(Context packageContext, UUID crimeId) {
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
@@ -37,6 +42,20 @@ public class CrimePagerActivity extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.crime_view_pager);
 
+        mFirstCrime = (Button) findViewById(R.id.crime_first);
+        mFirstCrime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(0);
+            }
+        });
+
+        mLastCrime = (Button) findViewById(R.id.crime_last);
+        mLastCrime.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(mCrimes.size() - 1);
+            }
+        });
+
         mCrimes = CrimeLab.get(this).getCrimes();
         FragmentManager fragmentManager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fragmentManager) {
@@ -50,6 +69,32 @@ public class CrimePagerActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return mCrimes.size();
+            }
+        });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 0) {
+                    mFirstCrime.setEnabled(false);
+                } else {
+                    mFirstCrime.setEnabled(true);
+                }
+                if (position == mCrimes.size() - 1) {
+                    mLastCrime.setEnabled(false);
+                } else {
+                    mLastCrime.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
 
