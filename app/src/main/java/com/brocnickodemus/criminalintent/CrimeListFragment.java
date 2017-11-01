@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private TextView mTextView;
+    private Button mButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,19 @@ public class CrimeListFragment extends Fragment {
 
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mTextView = (TextView) view.findViewById(R.id.empty_text_view);
+        mButton = (Button) view.findViewById(R.id.empty_view_button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Crime crime = new Crime();
+                CrimeLab.get(getActivity()).addCrime(crime);
+                Intent intent = CrimePagerActivity
+                        .newIntent(getActivity(), crime.getId());
+                startActivity(intent);
+            }
+        });
 
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
@@ -171,6 +187,14 @@ public class CrimeListFragment extends Fragment {
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
+
+        if (crimes.isEmpty()) {
+            mTextView.setVisibility(View.VISIBLE);
+            mButton.setVisibility(View.VISIBLE);
+            } else {
+            mTextView.setVisibility(View.GONE);
+            mButton.setVisibility(View.GONE);
+        }
 
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
