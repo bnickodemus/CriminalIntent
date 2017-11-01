@@ -2,6 +2,7 @@ package com.brocnickodemus.criminalintent;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.brocnickodemus.criminalintent.database.CrimeBaseHelper;
@@ -56,6 +57,20 @@ public class CrimeLab {
         mDatabase.update(CrimeTable.NAME, values,
                 CrimeTable.Cols.UUID + " = ?",
                 new String[] { uuidString });
+    }
+
+    private Cursor queryCrimes(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                CrimeTable.NAME,
+                null, // columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+
+        return cursor;
     }
 
     private static ContentValues getContentValues(Crime crime) {
