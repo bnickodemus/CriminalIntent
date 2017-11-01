@@ -36,7 +36,9 @@ public class CrimeLab {
     }
 
     public void addCrime(Crime c) {
+        ContentValues values = getContentValues(c);
 
+        mDatabase.insert(CrimeTable.NAME, null, values);
     }
 
     public List<Crime> getCrimes() {
@@ -44,8 +46,16 @@ public class CrimeLab {
     }
 
     public Crime getCrime(UUID id) {
-
         return null;
+    }
+
+    public void updateCrime(Crime crime) {
+        String uuidString = crime.getId().toString();
+        ContentValues values = getContentValues(crime);
+
+        mDatabase.update(CrimeTable.NAME, values,
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { uuidString });
     }
 
     private static ContentValues getContentValues(Crime crime) {
